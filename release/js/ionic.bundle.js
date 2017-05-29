@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.3
+ * Ionic, v1.3.3-gw.0
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.3.3';
+window.ionic.version = '1.3.3-gw.0';
 
 (function (ionic) {
 
@@ -53185,7 +53185,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.3
+ * Ionic, v1.3.3-gw.0
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -55843,9 +55843,20 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
       }
 
       return $timeout(function() {
-        if (!modalStack.length) {
+        var otherSibling = false;
+
+        for (var i = 0; i < modalStack.length; ++i) {
+          if (modalStack[i].viewType === self.viewType) {
+            // there are other modal (or popover, depending on viewType)
+            otherSibling = true;
+            break;
+          }
+        }
+
+        if (!otherSibling) {
           $ionicBody.removeClass(self.viewType + '-open');
         }
+        
         self.el.classList.add('hide');
       }, self.hideDelay || 320);
     },
