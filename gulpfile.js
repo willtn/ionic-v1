@@ -95,7 +95,7 @@ function makeChangelog(options) {
   var version = options.version || pkg.version;
   var deferred = q.defer();
   changelog({
-    repository: 'https://github.com/driftyco/ionic',
+    repository: 'https://github.com/ionic-team/ionic',
     version: version,
     subtitle: subtitle,
     file: file,
@@ -192,15 +192,12 @@ gulp.task('scripts-ng', function() {
 
 gulp.task('sass', function(done) {
   gulp.src('scss/ionic.scss')
-    .pipe(header(banner))
-    .pipe(sass({
-      onError: function(err) {
-        //If we're watching, don't exit on error
-        if (IS_WATCH) {
-          console.log(gutil.colors.red(err));
-        } else {
-          done(err);
-        }
+    // .pipe(header(banner))
+    .pipe(sass().on('error', function(err){
+      if (IS_WATCH){
+        console.log(gutil.colors.red(err));
+      } else {
+        done(err);
       }
     }))
     .pipe(concat('ionic.css'))
@@ -339,7 +336,7 @@ gulp.task('release-github', function(done) {
   .then(function(log) {
     var version = 'v' + pkg.version;
     github.releases.createRelease({
-      owner: 'driftyco',
+      owner: 'ionic-team',
       repo: 'ionic',
       tag_name: version,
       name: version + ' "' + pkg.codename + '"',
@@ -357,7 +354,7 @@ gulp.task('release-discourse', function(done) {
     standalone: true
   })
   .then(function(changelog) {
-    var content = 'Download Instructions: https://github.com/driftyco/ionic#quick-start\n\n' + changelog;
+    var content = 'Download Instructions: https://github.com/ionic-team/ionic#quick-start\n\n' + changelog;
     return qRequest({
       url: 'http://forum.ionicframework.com/posts',
       method: 'post',
